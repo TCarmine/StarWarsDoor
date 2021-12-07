@@ -11,15 +11,25 @@ module.exports = function (passport) {
       User.findOne({username:username},(err, user) => {
         if(err) throw err
         if(!user) return done(null, false)
-        bcrypt.compare(password, user.password),(err, result)=>{
+        bcrypt.compare(password, user.password,(err, result) => {
           if(err) throw err
           if(result === true){
             return done(null, user)
           } else {
             return done(null, false)
           }
-        }
+        })
       })
     })
   )
+
+  passport.serializerUser((user,cb) => {
+    cb(null, user.id)
+  })
+
+  passport.deserilizedUser((id,cb)=> {
+    User.findOne({_id:id },(err,user) => {
+      cb(err, user)
+    })
+  })
 }
