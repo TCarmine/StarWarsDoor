@@ -56,12 +56,16 @@ app.post("/register",(req, res) =>{
     try { 
       if(doc) res.send("User already exist") // need to be routed appropiate FE page
       if(!doc){
-        const newUser = new User({
-          username: req.body.username,
-          password: req.body.password
-        })
-        await newUser.save()
-        res.send("User Created") // need to be routed appropiate FE page
+        try{
+            const newUser = new User({
+            username: req.body.username,
+            passport: req.body.passport
+          })
+          await newUser.save()
+          res.send("User Created") // need to be routed appropiate FE page
+        }catch(err){
+          console.log("this is the error: ", err)
+        }
       }
     }catch(err){
       console.log("this is the error: ", err)
