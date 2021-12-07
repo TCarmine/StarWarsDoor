@@ -45,8 +45,9 @@ app.use(session({
 }))
 
 app.use(cookieParser("secretcode"))
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.json())
 require('./passportConfig')(passport)
 
 
@@ -54,24 +55,19 @@ require('./passportConfig')(passport)
 //----End Middleware
 
 // Routes
-app.post("/login",(req, res, next) =>{
-  passport.authenticate('local', (err, user, info) => {
-    try{
-      if(err) throw err
-      if(!user) res.send("No User Exists")
-      else{
-        req.log(user, err  => {
-          if(err) throw err 
-          res.send('Successfully logged')
-          console.log(req.user)
-        })
-      }
-    }catch(err){
-      console.log("this is the error: ", err)
-    }  
-
-  })(req, res, next)
-})
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, doc, info) => {
+    if (err) throw err;
+    if (!doc) res.send("No User Exists");
+    else {
+      req.logIn(doc, (err) => {
+        if (err) throw err;
+        res.send("Successfully Authenticated");
+        console.log(req.doc);
+      });
+    }
+  })(req, res, next);
+});
 
 app.post("/register",(req, res) =>{
   User.findOne({username:req.body.username}, async (err, doc)=>{

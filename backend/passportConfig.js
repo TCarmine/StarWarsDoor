@@ -1,7 +1,7 @@
-const { Passport } = require('passport/lib')
-const User = require('./user'),
-      bcrypt = require('bcryptjs'),
-      localStrategy = require('passport-local').Strategy
+const User = require("./user")
+const bcrypt = require("bcryptjs")
+const passport = require('passport')
+const localStrategy = require("passport-local").Strategy
 
 
 module.exports = function (passport) {
