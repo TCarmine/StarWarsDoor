@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
 const passport = require('passport')
-const passportLocal = require('passport-local').Strategy
 const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
@@ -56,18 +55,36 @@ require('./passportConfig')(passport)
 
 // Routes
 app.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, doc, info) => {
-    if (err) throw err;
-    if (!doc) res.send("No User Exists");
-    else {
-      req.logIn(doc, (err) => {
-        if (err) throw err;
-        res.send("Successfully Authenticated");
-        console.log(req.doc);
-      });
+  passport.authenticate("local",{session : false},
+  async (err, user, info) => {
+    try{
+      if (err) {
+        return res.json({
+            message: "Internal Server Error!",
+        })
+      }
+      else if (!user) {
+        return res.json({
+            message: "No Such User!"
+        })
+      }
+      else {
+        await req.logIn(user, (err) => {
+          if (err) {
+            return res.json({
+                message: "Login Failure!"
+            })
+          }
+          return res.json({
+            message: "Login Success!"
+        })
+        })
+      }
+    }catch(err){
+      console.log("this is the error: ", err)
     }
-  })(req, res, next);
-});
+  })(req, res, next)
+})
 
 app.post("/register",(req, res) =>{
   User.findOne({username:req.body.username}, async (err, doc)=>{

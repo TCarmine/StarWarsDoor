@@ -14,19 +14,19 @@ function App() {
       method:"POST",
       data: {
         username: registerUsername,
-        password: setRegisterPassword,
+        password: registerPassword,
       },
       withCredentials: true,
       url:"http://localhost:4000/register",
     }).then( res => console.log(res))
   } 
 
-  const loginUser = () =>{
+  const login = () =>{
     axios({
       method:"POST",
       data: {
         username: loginUsername,
-        password: setLoginPassword,
+        password: loginPassword,
       },
       withCredentials: true,
       url:"http://localhost:4000/login",
@@ -57,7 +57,7 @@ function App() {
         <h1>Login</h1>
         <input type="text" placeholder="username" onChange={e =>setLoginUsername(e.target.value)} />
         <input type="text" placeholder="password" onChange={e =>setLoginPassword(e.target.value)} />
-        <button onClick={loginUser}>Submit</button>
+        <button onClick={login}>Submit</button>
       </div> 
 
       <div>
