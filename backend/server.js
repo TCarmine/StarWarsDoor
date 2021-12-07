@@ -45,10 +45,32 @@ app.use(session({
 }))
 
 app.use(cookieParser("secretcode"))
+app.use(passport.initialize())
+app.use(passport.session())
+require('./passportConfig')(passport)
 
-// Routers
-app.post("/login",(req, res) =>{
-  console.log(req.body)
+
+
+//----End Middleware
+
+// Routes
+app.post("/login",(req, res, next) =>{
+  passport.authenticate('local', (err, user, info) => {
+    try{
+      if(err) throw err
+      if(!user) res.send("No User Exists")
+      else{
+        req.log(user, err  => {
+          if(err) throw err 
+          res.send('Successfully logged')
+          console.log(req.user)
+        })
+      }
+    }catch(err){
+      console.log("this is the error: ", err)
+    }  
+
+  })(req, res, next)
 })
 
 app.post("/register",(req, res) =>{
@@ -73,12 +95,14 @@ app.post("/register",(req, res) =>{
   })
 })
 
-app.get("/getUser",(req, res) =>{
+app.get("/user",(req, res) =>{
+  res.send(req.user)
 
 })
 
+// End of Routes
 
-
+// Start Server
 app.listen(4000,() =>{
   console.log('Server has started')
 })
