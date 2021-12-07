@@ -7,21 +7,28 @@ const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-
 const app = express()
+const User = require('./user')
 
 //DB connetion
-mongoose.connect(
-  "mongodb+srv://Carmine:%24vetere02468T%21%3F@cluster0.md02r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  {
-    useNewUrlParser:true,
-    useUnifiedTopology: true
-  },
-  ()=>{
-    console.log("Mongoose is connected")
-  }
-)
+const mongoUri = "mongodb+srv://Carmine:%24vetere02468T%21%3F@cluster0.md02r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
+mongoose.connect(mongoUri, { 
+  useNewUrlParser: true,     
+  useUnifiedTopology: true 
+})
+
+mongoose.connection.on("connected", ()=>{
+  console.log("Connected to mongo instace")
+} )
+
+mongoose.connection.on("Error", (err)=>{
+  console.log("There was some error", err)
+} )
+
+mongoose.connection.on("Error", (err)=>{
+  console.log("There was some error", err)
+} )
 
 // Middleware
 app.use(bodyParser.json())
@@ -45,7 +52,21 @@ app.post("/login",(req, res) =>{
 })
 
 app.post("/register",(req, res) =>{
-  console.log(req.body)
+  User.findOne({username:req.body.username}, async (err, doc)=>{
+    try { 
+      if(doc) res.send("User already exist") // need to be routed appropiate FE page
+      if(!doc){
+        const newUser = new User({
+          username: req.body.username,
+          password: req.body.password
+        })
+        await newUser.save()
+        res.send("User Created") // need to be routed appropiate FE page
+      }
+    }catch(err){
+      console.log("this is the error: ", err)
+    }  
+  })
 })
 
 app.get("/getUser",(req, res) =>{
