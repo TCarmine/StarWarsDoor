@@ -3,19 +3,32 @@ import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input'
+import axios from 'axios'
 
 const Auth = () => {
   const classes = useStyles()
 
   const[showPassword, setShowPassword] = useState(false)
   const[isRegistered, setIsRegistered ] = useState(false)
+  const [registerUsername, setRegisterUsername] = useState("")
+  const [registerPassword, setRegisterPassword] = useState("")
 
   const handleShowPassword = () => setShowPassword(prevShowPassword =>!prevShowPassword)
 
   const handleSubmit = () => {}
 
-  const handleChange = () => {}
-
+  const registerUser = () =>{
+    axios({
+      method:"POST",
+      data: {
+        username: registerUsername,
+        password: registerPassword,
+      },
+      withCredentials: true,
+      url:"http://localhost:4000/register",
+    }).then( res => console.log(res))
+  }
+  
   const switchMode = () =>{
     setIsRegistered((prevIsRegistered) => !prevIsRegistered)
     handleShowPassword(false)
@@ -32,18 +45,17 @@ const Auth = () => {
           <Grid container spacing={2}>
             { isRegistered && (
                 <>
-                  <Input name="firstName" label="Account name" handleChange={handleChange} autofocus half />
-                  <Input name="Password" label="Password" handleChange={handleChange} half />
+                  <Input name="firstName" label="Account name" onChange={e =>setRegisterUsername(e.target.value)} autofocus />
                 </>
             )}
-            <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
-            <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} />
-            {isRegistered && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}
+             {/* <Input name="email" label="Email Address" handleChange={handleChange} type="email" onChange={e =>setRegisterUsername(e.target.value)}l" /> */}
+           <Input name="password" label="Password" onChange={e =>setRegisterPassword(e.target.value)} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} /> 
+            {/* {isRegistered && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}*/}
           </Grid>
-          <Button type="submit" fullWidth variant="conatiner" color="primary" className={classes.submit}>
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={registerUser}>
             {isRegistered ? "Register" : "Login"}
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
                 {isRegistered ? "Already have an account? Login" : " Don't have an account? Register!"}
