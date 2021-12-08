@@ -7,16 +7,18 @@ import axios from 'axios'
 
 const initialState = {accountName:"", password:""}
 
-const LoggedButton = (isRegistered) =>{
+const LoggedButton = (setIsRegistered, isRegistered) =>{
+  
   const classes = useStyles()
   return(
     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-      {isRegistered ? "Register" :  "Login"  }
+      {isRegistered ?   "Login" :  "Register" }
     </Button>
   )
 }
  
 const UserButton = (data) => {
+  
   return(
     <Button> {data.username}</Button>
   ) 
@@ -26,7 +28,7 @@ const Auth = () => {
   const classes = useStyles()
 
   const[showPassword, setShowPassword] = useState(false)
-  const[isRegistered, setIsRegistered ] = useState(false)
+  const[isRegistered, setIsRegistered ] = useState(true)
   const[isLoggedIn, setIsLoggedIn ] = useState(false)
   //const [registerUsername, setRegisterUsername] = useState("")
   //const [registerPassword, setRegisterPassword] = useState("")
@@ -47,7 +49,7 @@ const Auth = () => {
           },
           withCredentials: true,
           url:"http://localhost:4000/login",
-        }).then( res => setIsLoggedIn(prevIsLoggedIn => !prevIsLoggedIn) ) // load resources 
+        }).then( res => setIsLoggedIn(prevIsLoggedIn => !prevIsLoggedIn) ) // set variable to load resources 
     } else {
       console.log(formData)
         axios({
@@ -58,7 +60,7 @@ const Auth = () => {
           },
           withCredentials: true,
           url:"http://localhost:4000/register",
-        }).then( res => console.log(res))
+        }).then( res => setIsRegistered(prevIsRegistered => !prevIsRegistered))
     }
   }
 
@@ -102,12 +104,12 @@ const Auth = () => {
           </Grid>
 
           {
-            true ? (<LoggedButton isRegistered={isRegistered}></LoggedButton>) : ("Don't have an account? Register!")
+            (isRegistered && isLoggedIn) ? <UserButton /> : ( isRegistered && <LoggedButton isRegistered={isRegistered}></LoggedButton>) 
           }
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
-                {isRegistered ? "Login" : "Don't have an account? Register!"  }
+                {!isRegistered ? "Login" : "Don't have an account? Register!"  }
               </Button>
             </Grid>  
           </Grid>
