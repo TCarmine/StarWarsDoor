@@ -7,7 +7,7 @@ import axios from 'axios'
 
 const initialState = {accountName:"", password:""}
 
-const LoggedButton = (setIsRegistered, isRegistered) =>{
+const LoggedButton = (isRegistered) =>{
   
   const classes = useStyles()
   return(
@@ -49,7 +49,15 @@ const Auth = () => {
           },
           withCredentials: true,
           url:"http://localhost:4000/login",
-        }).then( res => setIsLoggedIn(prevIsLoggedIn => !prevIsLoggedIn) ) // set variable to load resources 
+        }).then( res => {
+          
+          setIsLoggedIn(true) 
+          return (
+            
+            <UserButton />
+
+          )  
+        })   // set variable to load resources 
     } else {
       console.log(formData)
         axios({
@@ -60,7 +68,7 @@ const Auth = () => {
           },
           withCredentials: true,
           url:"http://localhost:4000/register",
-        }).then( res => setIsRegistered(prevIsRegistered => !prevIsRegistered))
+        }).then( res => setIsRegistered(true))
     }
   }
 
@@ -104,12 +112,12 @@ const Auth = () => {
           </Grid>
 
           {
-            (isRegistered && isLoggedIn) ? <UserButton /> : ( isRegistered && <LoggedButton isRegistered={isRegistered}></LoggedButton>) 
+            (isRegistered && isLoggedIn) ? <UserButton /> : <LoggedButton isRegistered={isRegistered} onClick={switchMode}></LoggedButton>
           }
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
-                {!isRegistered ? "Login" : "Don't have an account? Register!"  }
+                {isRegistered ? "Login" : "Don't have an account? Register!"  }
               </Button>
             </Grid>  
           </Grid>
