@@ -1,32 +1,69 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input'
 import axios from 'axios'
+
+const initialState = {accountName:"", password:""}
+
+const LoggedButton = (isRegistered) =>{
+  const classes = useStyles()
+  return(
+    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+      {isRegistered ? "Register" :  "Login"  }
+    </Button>
+  )
+}
+ 
+const UserButton = (data) => {
+  return(
+    <Button> {data.username}</Button>
+  ) 
+}
 
 const Auth = () => {
   const classes = useStyles()
 
   const[showPassword, setShowPassword] = useState(false)
   const[isRegistered, setIsRegistered ] = useState(false)
-  const [registerUsername, setRegisterUsername] = useState("")
-  const [registerPassword, setRegisterPassword] = useState("")
+  const[isLoggedIn, setIsLoggedIn ] = useState(false)
+  //const [registerUsername, setRegisterUsername] = useState("")
+  //const [registerPassword, setRegisterPassword] = useState("")
+  const [formData, setFormData] = useState(initialState)
+  const [data, setData] = useState(null)
 
   const handleShowPassword = () => setShowPassword(prevShowPassword =>!prevShowPassword)
 
-  const handleSubmit = () => {}
 
-  const registerUser = () =>{
-    axios({
-      method:"POST",
-      data: {
-        username: registerUsername,
-        password: registerPassword,
-      },
-      withCredentials: true,
-      url:"http://localhost:4000/register",
-    }).then( res => console.log(res))
+  const handleSubmit = (e) => {
+
+    if(isRegistered){
+      axios({
+          method:"POST",
+          data: {
+            username: formData.accountName,
+            password: formData.password,
+          },
+          withCredentials: true,
+          url:"http://localhost:4000/login",
+        }).then( res => setIsLoggedIn(prevIsLoggedIn => !prevIsLoggedIn) ) // load resources 
+    } else {
+      console.log(formData)
+        axios({
+          method:"POST",
+          data: {
+            username: formData.accountName,
+            password: formData.password,
+          },
+          withCredentials: true,
+          url:"http://localhost:4000/register",
+        }).then( res => console.log(res))
+    }
+  }
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
   
   const switchMode = () =>{
@@ -34,31 +71,43 @@ const Auth = () => {
     handleShowPassword(false)
   }
 
+
+ const showResources = () =>{
+  
+  const getUser = () => {
+    axios({
+      method:"GET",
+      withCredentials: true,
+      url:"http://localhost:4000/user",
+    }).then(res => {
+        setData(res.data)
+        console.log(res.data)
+    }) 
+  }
+ }
+
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevantion={3}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5">{isRegistered? "Register" : "Login"}</Typography>
+        <Typography variant="h5">{isRegistered ? "Login" : "Register"}</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            { isRegistered && (
-                <>
-                  <Input name="firstName" label="Account name" onChange={e =>setRegisterUsername(e.target.value)} autofocus />
-                </>
-            )}
-             {/* <Input name="email" label="Email Address" handleChange={handleChange} type="email" onChange={e =>setRegisterUsername(e.target.value)}l" /> */}
-           <Input name="password" label="Password" onChange={e =>setRegisterPassword(e.target.value)} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} /> 
+            {/* <Input name="email" label="Email Address" handleChange={handleChange} type="email" onChange={e =>setRegisterUsername(e.target.value)}l" /> */}
+           <Input name="accountName" label="Account name" autofocus handleChange={handleChange}/>
+           <Input name="password" label="Password" type={showPassword ? "text" : "password"} handleChange={handleChange} handleShowPassword={handleShowPassword} /> 
             {/* {isRegistered && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}*/}
           </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={registerUser}>
-            {isRegistered ? "Register" : "Login"}
-          </Button>
+
+          {
+            true ? (<LoggedButton isRegistered={isRegistered}></LoggedButton>) : ("Don't have an account? Register!")
+          }
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
-                {isRegistered ? "Already have an account? Login" : " Don't have an account? Register!"}
+                {isRegistered ? "Login" : "Don't have an account? Register!"  }
               </Button>
             </Grid>  
           </Grid>
