@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import Auth from './components/Auth/Auth'
 
 function App() {
   const [registerUsername, setRegisterUsername] = useState("")
@@ -67,6 +68,7 @@ function App() {
           data ? <h1>{data.username}</h1>  : ''
         }
       </div>
+      <Auth />
     </div>
   );
 }
