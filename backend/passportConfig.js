@@ -28,22 +28,6 @@ module.exports = function (passport) {
       });
     }
   ));
- /*  passport.use(new localStrategy(function(username, password,done){
-    User.findOne({username:username},function(err,user){
-      if(err){ return done(err)}
-      if(!user){ return done(null, false,{message:'Incorrect Username'})}
-     
-      bcrypt.compare(password, user.password, function(err,res){
-        if(err) return done(err)
-  
-        if(res === false){
-          return done(null, false,{message:'Incorrect Password'})
-        }
-        return done(null, user)
-      })
-    })
-  })) */
-
   passport.serializeUser((user, cb) => {
     cb(null, user.id);
   })

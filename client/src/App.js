@@ -3,7 +3,7 @@ import './App.css'
 import axios from 'axios'
 import Auth from './components/Auth/Auth'
 
-function App() {
+function App({}) {
   return (
     <>
       <Auth />

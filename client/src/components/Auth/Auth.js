@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core';
+import { Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from './styles'
 import Input from './Input'
@@ -17,25 +17,22 @@ const LoggedButton = (isRegistered) =>{
   )
 }
  
-const UserButton = (data) => {
+const UserButton = (f) => {
   
   return(
-    <Button> {data.username}</Button>
+    <Button> </Button>
   ) 
 }
 
 const Auth = () => {
   const classes = useStyles()
 
-  const[showPassword, setShowPassword] = useState(false)
-  const[isRegistered, setIsRegistered ] = useState(true)
-  const[isLoggedIn, setIsLoggedIn ] = useState(false)
-  //const [registerUsername, setRegisterUsername] = useState("")
-  //const [registerPassword, setRegisterPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [isRegistered, setIsRegistered ] = useState(true)
+  const [isLoggedIn, setIsLoggedIn ] = useState(false)
   const [formData, setFormData] = useState(initialState)
-  const [data, setData] = useState(null)
 
-  const handleShowPassword = () => setShowPassword(prevShowPassword =>!prevShowPassword)
+  const handleShowPassword = () => setShowPassword(prevShowPassword => !prevShowPassword)
 
 
   const handleSubmit = (e) => {
@@ -43,32 +40,25 @@ const Auth = () => {
     if(isRegistered){
       axios({
           method:"POST",
-          data: {
+          formData: {
             username: formData.accountName,
             password: formData.password,
           },
           withCredentials: true,
           url:"http://localhost:4000/login",
         }).then( res => {
-          
           setIsLoggedIn(true) 
-          return (
-            
-            <UserButton />
-
-          )  
         })   // set variable to load resources 
     } else {
-      console.log(formData)
-        axios({
-          method:"POST",
-          data: {
-            username: formData.accountName,
-            password: formData.password,
-          },
-          withCredentials: true,
-          url:"http://localhost:4000/register",
-        }).then( res => setIsRegistered(true))
+      axios({
+        method:"POST",
+        formData: {
+          username: formData.accountName,
+          password: formData.password,
+        },
+        withCredentials: true,
+        url:"http://localhost:4000/register",
+      }).then( res => setIsRegistered(true))
     }
   }
 
@@ -82,19 +72,17 @@ const Auth = () => {
   }
 
 
- const showResources = () =>{
-  
   const getUser = () => {
     axios({
       method:"GET",
       withCredentials: true,
       url:"http://localhost:4000/user",
     }).then(res => {
-        setData(res.data)
-        console.log(res.data)
-    }) 
+      setFormData(res.formData)
+      console.log(res.formData) 
+    })
   }
- }
+ 
 
   return (
     <Container component="main" maxWidth="xs">
@@ -112,7 +100,7 @@ const Auth = () => {
           </Grid>
 
           {
-            (isRegistered && isLoggedIn) ? <UserButton /> : <LoggedButton isRegistered={isRegistered} onClick={switchMode}></LoggedButton>
+            (isRegistered && isLoggedIn) ? <UserButton formData={formData} /> : <LoggedButton isRegistered={isRegistered} onClick={switchMode}></LoggedButton>
           }
           <Grid container justifyContent="flex-end">
             <Grid item>
@@ -123,7 +111,15 @@ const Auth = () => {
           </Grid>
          </form>
       </Paper>
+      <div>
+        <h1>Get User</h1>
+        <button onClick={getUser}>Submit</button>
+        {
+          isLoggedIn ? <h1>{formData.accountName}</h1>  : ''
+        }
+      </div>
     </Container>
+    
   )
 }
 
