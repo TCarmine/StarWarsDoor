@@ -18,7 +18,7 @@ const GithubProvider = ({children})=>{
  
 
   const checkRequest = () => {
-    axios({data}) =>{ 
+    axios({data} =>{ 
         console.log()
     }).then((response)=>{
       console.log()
