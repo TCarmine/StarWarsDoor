@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { Avatar, Button, Paper, Grid, Typography, Container} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import useStyles from './styles'
+import { ThemeProvider } from '@mui/material/styles';
 import Input from './Input'
 import axios from 'axios'
 
@@ -12,8 +13,8 @@ const LoggedButton = (isRegistered) =>{
   const classes = useStyles()
   return(
     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-      {isRegistered ?   "Login" :  "Register" }
-    </Button>
+        {isRegistered ?   "Login" :  "Register" }
+      </Button>
   )
 }
  
