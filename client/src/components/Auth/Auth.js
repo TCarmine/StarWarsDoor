@@ -17,8 +17,7 @@ const LoggedButton = (isRegistered) =>{
   )
 }
  
-const UserButton = (f) => {
-  
+const UserButton = () => {
   return(
     <Button> </Button>
   ) 
