@@ -1,11 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import ResourceList from './ResourceList'
+import SearchForm from './SearchForm'
 
 const Home = () => {
   return (
-    <div>
-      <h2>All listed</h2>
-    </div>
+    <main>
+       <SearchForm />
+       <ResourceList />
+    </main>
+  
   )
 }
 
