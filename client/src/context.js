@@ -9,12 +9,11 @@ const AppProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [resources, setResources] = useState([])
 
-  
 
 
- /*  function getId(url) {
-    return url.split('/')[url.split('/').length - 2]
-  } */
+/*   useEffect(()=>{
+    fetchResources()
+  },[searchTerm]) */
 
   return (
     <AppContext.Provider 
