@@ -26,12 +26,14 @@ const PeopleList = () => {
             name, 
             eye_color,
             birth_year,
+            url,
           } = item
           return { 
             id: `${name}${height}`,
             name : name, 
             eye: eye_color,
             birthday: birth_year,
+            url:url,
           }
         })
         console.log(newPeople)
