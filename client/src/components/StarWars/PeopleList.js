@@ -36,7 +36,7 @@ const PeopleList = () => {
             url:url,
           }
         })
-        console.log(newPeople)
+   
         setPeople(newPeople)
         setLoading(false)
       }else{
