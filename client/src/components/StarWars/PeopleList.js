@@ -9,18 +9,15 @@ const url = 'https://swapi.dev/api/people/'
 const PeopleList = () => {
   //const { resources, loading } = useGlobalContext()
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
   const [people, setPeople] = useState([])
-  console.log("this are the people: ",people)  
- /*  if(loading){
-    return <Loading />
-  } */
+
 
   const fetchResources = async () => {
     setLoading(true)
     try{
       const response = await fetch(`${url}`) 
       const data = await response.json()
-      console.log(data)
       const { results } = data
       
        if(results){
@@ -33,14 +30,14 @@ const PeopleList = () => {
           } = item
           return { 
             id: `${name}${height}`,
-            height: height,
             name : name, 
             eye: eye_color,
             birthday: birth_year,
           }
         })
-        console.log("this are the new :",newPeople)
+        console.log(newPeople)
         setPeople(newPeople)
+        setLoading(false)
       }else{
         setPeople([])
       }
@@ -52,26 +49,30 @@ const PeopleList = () => {
 
   useEffect(()=>{
     fetchResources()
-  },[])
+  },[searchTerm])
 
-  /* if(results.lenght < 1){
+  if(loading){
+    return <Loading />
+  }
+
+  if(people.lenght < 1){
      return(
       <h2 className="section-title">
         no Carachters to show
       </h2>
      ) 
-  } */
+  }
 
   return (
     <section className="section">
       <h2 className="section-title">
         All Characters
        </h2>
-      <div className="cocktails-center">
-       {/*  {resources.map((item)=>{
+      <div className="resources-center">
+       {people.map((item)=>{
           
-          return <div key={item} {...item} />
-        })} */}
+          return <div key={item.id} {...item} />
+        })}
       </div>
       </section>
    )
