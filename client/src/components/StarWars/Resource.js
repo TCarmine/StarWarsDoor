@@ -1,11 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Resource = () => {
+const Resource = ({item}) => {
   return (
-    <div>
+    <article>
       <h2>All listed</h2>
-    </div>
+      <div>
+        <h3>{item}</h3>
+      </div>
+     
+    </article>
   )
 }
 

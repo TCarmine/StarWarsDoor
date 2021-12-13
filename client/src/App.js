@@ -8,6 +8,7 @@ import Home from './components/StarWars/Home'
 import Resource from './components/StarWars/Resource'
 import About from './components/StarWars/About'
 import Error from './components/StarWars/Error'
+import PeopleList from './components/StarWars/PeopleList'
 
 
 
@@ -21,7 +22,7 @@ function App({}) {
      <NavBar />
      <Routes>
        <Route exact path="/" element={<Home />} />
-       <Route exact path="/" element={<Resource />} />
+       <Route exact path="/" element={<PeopleList />} />
        <Route exact path="/about" element={<About />} />
        <Route exact path="*" element={<Error />} />
      </Routes>
