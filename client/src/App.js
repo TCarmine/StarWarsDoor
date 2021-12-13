@@ -14,7 +14,7 @@ import Error from './components/StarWars/Error'
 function App({}) {
   return (
     
-   /*  <>
+/*     <>
       <Auth />
     </> */
     <Router>
