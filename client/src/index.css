@@ -177,3 +177,43 @@ resource List
     grid-template-columns: repeat(auto-fill, minmax(338.8px, 1fr));
   }
 }
+
+/* 
+====== 
+Cocktail 
+======
+*/
+
+.person {
+  background: var(--mainWhite);
+  margin-bottom: 2rem;
+  box-shadow: var(--lightShadow);
+  transition: var(--mainTransition);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--mainBorderRadius);
+}
+.person:hover {
+  box-shadow: var(--darkShadow);
+}
+.person img {
+  height: 20rem;
+  object-fit: cover;
+  border-top-left-radius: var(--mainBorderRadius);
+  border-top-right-radius: var(--mainBorderRadius);
+}
+.person-footer {
+  padding: 1.5rem;
+}
+.person-footer h3,
+.person-footer h4,
+.person-footer p {
+  margin-bottom: 0.3rem;
+}
+.person-footer h3 {
+  font-size: 2rem;
+}
+.person-footer p {
+  color: var(--darkGrey);
+  margin-bottom: 0.5rem;
+}

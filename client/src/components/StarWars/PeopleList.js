@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
-import Resource from './Resource'
 import Loading from './Loading'
 import { useGlobalContext } from '../../context'
+import Person from './Resources/Person'
 
 const url = 'https://swapi.dev/api/people/'
 
@@ -11,7 +11,6 @@ const PeopleList = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [people, setPeople] = useState([])
-
 
   const fetchResources = async () => {
     setLoading(true)
@@ -69,9 +68,9 @@ const PeopleList = () => {
         All Characters
        </h2>
       <div className="resources-center">
-       {people.map((item)=>{
-          
-          return <div key={item.id} {...item} />
+       {people.map((person)=>{
+          return <Person
+          key={person.id} {...person} />
         })}
       </div>
       </section>
